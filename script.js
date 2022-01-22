@@ -44,14 +44,18 @@ function StartScreen() {
 
 function ApproxScreen() {
 
-    var randPtsBtn;
+    var randPtsBtn, pauseBtn, restartBtn;
     var piApprox = 0.0;
     var totalPts = 0;
     var ptsInCircle = 0;
+    var genPts = false;
 
     this.enter = function() {
 
         randPtsBtn = new Clickable();
+        pauseBtn = new Clickable();
+        restartBtn = new Clickable();
+
         this.initBtns();
 
     }
@@ -60,6 +64,8 @@ function ApproxScreen() {
 
         background("#e6e6e6");
         randPtsBtn.draw();
+        pauseBtn.draw();
+        restartBtn.draw();
 
         this.drawCenterCircle();
 
@@ -81,6 +87,9 @@ function ApproxScreen() {
         text("(" + int(mouseX) + ", " + int(mouseY) + ")", int(mouseX), int(mouseY));
 
 
+        if (genPts) {
+            this.generateRandPts();
+        }
 
 
 
@@ -110,15 +119,16 @@ function ApproxScreen() {
 
     this.initBtns = function() {
 
+        // gen random points btn
         randPtsBtn.locate(canvasWidth-260, 10);
         randPtsBtn.resize(150, 30);
         randPtsBtn.color = "#fff";
         randPtsBtn.cornerRadius = 3;
         randPtsBtn.strokeWeight = 1;
         randPtsBtn.text = "Generate Random Points";
-        randPtsBtn.textSize = 12;
+        randPtsBtn.textSize = 12.5;
         randPtsBtn.onPress = function() {
-            generateRandPts();
+            genPts = true;
         }
         randPtsBtn.onHover = function() {
             randPtsBtn.stroke = "#333";
@@ -131,10 +141,60 @@ function ApproxScreen() {
             randPtsBtn.textColor = "#000";
         }
 
+        // pause btn
+        pauseBtn.locate(canvasWidth-260, 45);
+        pauseBtn.resize(65, 30);
+        pauseBtn.color = "#fff";
+        pauseBtn.cornerRadius = 3;
+        pauseBtn.strokeWeight = 1;
+        pauseBtn.text = "Pause";
+        pauseBtn.textSize = 12.5;
+        pauseBtn.onPress = function() {
+            genPts = false;
+            piApprox = 0.0;
+            totalPts = 0;
+            ptsInCircle = 0;
+        }
+        pauseBtn.onHover = function() {
+            pauseBtn.stroke = "#333";
+            pauseBtn.color = "#bbb";
+            pauseBtn.textColor = "#fff";
+        }
+        pauseBtn.onOutside = function() {
+            pauseBtn.stroke = "#000";
+            pauseBtn.color = "#fff";
+            pauseBtn.textColor = "#000";
+        }
+
+        // start over btn
+        restartBtn.locate(canvasWidth-190, 45);
+        restartBtn.resize(80, 30);
+        restartBtn.color = "#fff";
+        restartBtn.cornerRadius = 3;
+        restartBtn.strokeWeight = 1;
+        restartBtn.text = "Restart";
+        restartBtn.textSize = 12.5;
+        restartBtn.onPress = function() {
+            genPts = false;
+        }
+        restartBtn.onHover = function() {
+            restartBtn.stroke = "#333";
+            restartBtn.color = "#bbb";
+            restartBtn.textColor = "#fff";
+        }
+        restartBtn.onOutside = function() {
+            restartBtn.stroke = "#000";
+            restartBtn.color = "#fff";
+            restartBtn.textColor = "#000";
+        }
+
+
     }
 
     this.generateRandPts = function() {
-        
+
+        console.log("gen gen", genPts);
+
     }
 
 }
