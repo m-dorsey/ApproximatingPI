@@ -50,6 +50,8 @@ function ApproxScreen() {
     var ptsInCircle = 0;
     var genPts = false;
 
+    var flag = 0;
+
     this.enter = function() {
 
         randPtsBtn = new Clickable();
@@ -64,7 +66,6 @@ function ApproxScreen() {
 
         background("#e6e6e6");
         randPtsBtn.draw();
-        pauseBtn.draw();
         restartBtn.draw();
 
         this.drawCenterCircle();
@@ -89,7 +90,15 @@ function ApproxScreen() {
 
         if (genPts) {
             this.generateRandPts();
+            pauseBtn.draw();
+
         }
+
+        if (flag) {
+            pauseBtn.draw();
+        }
+
+
 
 
 
@@ -150,10 +159,16 @@ function ApproxScreen() {
         pauseBtn.text = "Pause";
         pauseBtn.textSize = 12.5;
         pauseBtn.onPress = function() {
-            genPts = false;
-            piApprox = 0.0;
-            totalPts = 0;
-            ptsInCircle = 0;
+            if (flag == 0) {
+                genPts = false;
+                pauseBtn.text = "Play";
+                flag = 1;
+            } else {
+                flag = 0;
+                genPts = true;
+                pauseBtn.text = "Pause";
+            }
+
         }
         pauseBtn.onHover = function() {
             pauseBtn.stroke = "#333";
@@ -176,6 +191,10 @@ function ApproxScreen() {
         restartBtn.textSize = 12.5;
         restartBtn.onPress = function() {
             genPts = false;
+            piApprox = 0.0;
+            totalPts = 0;
+            ptsInCircle = 0;
+            flag = 0;
         }
         restartBtn.onHover = function() {
             restartBtn.stroke = "#333";
@@ -193,7 +212,7 @@ function ApproxScreen() {
 
     this.generateRandPts = function() {
 
-        console.log("gen gen", genPts);
+        
 
     }
 
