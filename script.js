@@ -46,7 +46,8 @@ function ApproxScreen() {
 
     var randPtsBtn, pauseBtn, restartBtn;
     var piApprox = 0.0;
-    var totalPts = 0;
+    var totalPts = [];
+    var totalNumPts = 0;
     var ptsInCircle = 0;
     var genPts = false;
 
@@ -81,7 +82,7 @@ function ApproxScreen() {
             10, 50
         );
         text(
-            "Total Number of Points: " + totalPts,
+            "Total Number of Points: " + totalNumPts,
             10, 80
         );
 
@@ -97,6 +98,12 @@ function ApproxScreen() {
         if (flag) {
             pauseBtn.draw();
         }
+
+        for (p of totalPts) {
+            p.draw();
+        }
+
+
 
 
 
@@ -120,7 +127,7 @@ function ApproxScreen() {
 
         // center point
         fill("#000");
-        circle((canvasWidth/2)-(offset/2), (canvasHeight/2)+(offset/2), 3);
+        circle((canvasWidth/2)-(offset/2), (canvasHeight/2)+(offset/2), 2);
 
 
 
@@ -192,9 +199,11 @@ function ApproxScreen() {
         restartBtn.onPress = function() {
             genPts = false;
             piApprox = 0.0;
-            totalPts = 0;
+            totalNumPts = 0;
+            totalPts = [];
             ptsInCircle = 0;
             flag = 0;
+            pauseBtn.text = "Pause";
         }
         restartBtn.onHover = function() {
             restartBtn.stroke = "#333";
@@ -212,7 +221,19 @@ function ApproxScreen() {
 
     this.generateRandPts = function() {
 
-        
+        // center 350 450
+        // x constrain 0 -> canvasWidth - offset
+        // y constrain offset -> canvasHeight
+        totalNumPts += 1;
+        var pt = new Point(1);
+        pt.x = int( random(0, canvasWidth-offset) );
+        pt.y = int( random(offset, canvasHeight) );
+        pt.d = 3;
+        totalPts.push(pt);
+        //console.log(pt);
+
+
+        //noLoop();
 
     }
 
