@@ -2,15 +2,19 @@
 // scene manager
 var manager;
 
+// canvas lengths
+var canvasHeight, canvasWidth;
+
 function setup() {
 
     manager = new SceneManager();
     manager.addScene(StartScreen);
     manager.addScene(ApproxScreen);
 
-    manager.showNextScene();
+    manager.showScene(ApproxScreen);
 
-    createCanvas(600, 600);
+    canvasHeight = canvasWidth = 600;
+    createCanvas(canvasHeight, canvasWidth);
 
 }
 
@@ -42,7 +46,20 @@ function ApproxScreen() {
 
     this.draw = function() {
 
-        background("#333");
+        background("#e6e6e6");
+
+        this.drawCenterCircle();
+
+
+
+    }
+
+    this.drawCenterCircle = function() {
+
+        fill("#fff");
+        circle(canvasWidth/2, canvasHeight/2, canvasWidth-50);
+        fill("#000");
+        circle(canvasWidth/2, canvasHeight/2, 5);
 
     }
 
