@@ -8,6 +8,10 @@ var canvasHeight, canvasWidth;
 // offset
 var offset;
 
+/**
+    Sets up canvas, canvas sizes, and inits
+    Scene Manager
+*/
 function setup() {
 
     manager = new SceneManager();
@@ -17,21 +21,36 @@ function setup() {
     manager.showNextScene();
 
     canvasHeight = canvasWidth = 800;
+    // offset to bottom of screen
     offset = 100;
+
     createCanvas(canvasWidth-offset, canvasHeight);
 
 }
 
+/**
+    Draw Loop
+*/
 function draw() {
 
+    // shows screens
     manager.draw();
 
 }
 
+/**
+    Title screen of the simulation
+*/
 function StartScreen() {
 
+    // start -> pi approx screen
     var startBtn;
 
+    /**
+        Enter function includes statements that will
+        always be called when the parent function is
+        called
+    */
     this.enter = function() {
 
         startBtn = new Clickable();
@@ -39,11 +58,14 @@ function StartScreen() {
 
     }
 
+    /**
+        Draws the title text and start btn
+    */
     this.draw = function() {
 
         background("#f1f1f1");
 
-
+        // title text
         fill("#000");
         textSize(68);
         textFont("Georgia");
@@ -53,10 +75,16 @@ function StartScreen() {
             canvasHeight/2 - offset
         );
 
+        // show start btn
         startBtn.draw();
 
     }
 
+    /**
+        Initializes the start btn including
+        placement, onPress functions, and
+        text
+    */
     this.initBtns = function() {
 
         // start btn
@@ -68,14 +96,20 @@ function StartScreen() {
         startBtn.text = "Start";
         startBtn.textSize = 32;
         startBtn.textFont = "serif";
+
+        // when pressed, redirect to next screen
         startBtn.onPress = function() {
             manager.showNextScene();
         }
+
+        // change appearance when cursor hover
         startBtn.onHover = function() {
             startBtn.stroke = "#333";
             startBtn.color = "#bbb";
             startBtn.textColor = "#fff";
         }
+
+        // keep original colors when cursor !hover
         startBtn.onOutside = function() {
             startBtn.stroke = "#000";
             startBtn.color = "#fff";
@@ -86,18 +120,28 @@ function StartScreen() {
 
 }
 
+/**
+    Screen that simulates the PI
+    approximation
+*/
 function ApproxScreen() {
 
+    // generate, pause, restart btns
     var randPtsBtn, pauseBtn, restartBtn;
+    // center circle pt
     var centerPt;
+    // pi simulation vars
     var piApprox = 0.0;
     var totalPts = [];
     var totalNumPts = 0;
     var ptsInCircle = 0;
+    // flags for simulation
     var genPts = false;
-
     var flag = 0;
 
+    /**
+        Initializes btns
+    */
     this.enter = function() {
 
         randPtsBtn = new Clickable();
@@ -108,6 +152,11 @@ function ApproxScreen() {
 
     }
 
+    /**
+        Draw loops runs the simulation,
+        updates the text fields, and will
+        pause when indicated
+    */
     this.draw = function() {
 
         background("#f7f7f7");
@@ -116,6 +165,7 @@ function ApproxScreen() {
 
         this.drawCenterCircle();
 
+        //   init text fields
         textSize(16);
         textFont("Georgia");
         textAlign(LEFT);
@@ -134,31 +184,29 @@ function ApproxScreen() {
 
         // text("(" + int(mouseX) + ", " + int(mouseY) + ")", int(mouseX), int(mouseY));
 
-
+        // if simulation has started...
         if (genPts) {
             this.generateRandPts();
             pauseBtn.draw();
             this.updatePIApprox();
         }
 
+        // if simulation was paused...
         if (flag) {
             pauseBtn.draw();
         }
 
+        // draw all the points created
         for (p of totalPts) {
             p.draw();
         }
 
-
-
-
-
-
-
-
-
     }
 
+    /**
+        Draws the container circle and square
+        for the PI simulation
+    */
     this.drawCenterCircle = function() {
 
 
@@ -175,6 +223,8 @@ function ApproxScreen() {
 
         // center point
         fill("#000");
+        // create as point to compare with
+        // distance formula
         centerPt = new Point();
         centerPt.x = (canvasWidth/2)-(offset/2);
         centerPt.y = (canvasHeight/2)+(offset/2);
@@ -196,6 +246,8 @@ function ApproxScreen() {
         randPtsBtn.strokeWeight = 1;
         randPtsBtn.text = "Generate Random Points";
         randPtsBtn.textSize = 12.5;
+        // if generate button is pressed,
+        // start simulation
         randPtsBtn.onPress = function() {
             genPts = true;
         }
@@ -218,6 +270,7 @@ function ApproxScreen() {
         pauseBtn.strokeWeight = 1;
         pauseBtn.text = "Pause";
         pauseBtn.textSize = 12.5;
+        // if pause btn is pressed, pause simulation
         pauseBtn.onPress = function() {
             if (flag == 0) {
                 genPts = false;
@@ -228,7 +281,6 @@ function ApproxScreen() {
                 genPts = true;
                 pauseBtn.text = "Pause";
             }
-
         }
         pauseBtn.onHover = function() {
             pauseBtn.stroke = "#333";
@@ -249,6 +301,7 @@ function ApproxScreen() {
         restartBtn.strokeWeight = 1;
         restartBtn.text = "Restart";
         restartBtn.textSize = 12.5;
+        // if restart is pressed, clear fields
         restartBtn.onPress = function() {
             genPts = false;
             piApprox = 0.0;
@@ -269,9 +322,13 @@ function ApproxScreen() {
             restartBtn.textColor = "#000";
         }
 
-
     }
 
+    /**
+        Generates random points within the
+        square and indicates if it landed
+        inside or outside the circle
+    */
     this.generateRandPts = function() {
 
         // center 350 450
@@ -284,20 +341,24 @@ function ApproxScreen() {
         pt.d = 3;
         pt.color = "red";
 
-        // console.log(pt.distanceFrom(centerPt));
-        if ( pt.distanceFrom(centerPt) > 350) {
+        // if distance > circle radius, is outside circle
+        if ( pt.distanceFrom(centerPt) > (canvasWidth-offset)/2) {
             pt.color = "blue"
         } else {
             pt.color = "red";
             ptsInCircle += 1;
         }
 
+        // push all pts to array
         totalPts.push(pt);
-
-        // noLoop();
 
     }
 
+    /**
+        Calculates and updated the piiApprox
+        field through each iteration of the
+        draw loop
+    */
     this.updatePIApprox = function() {
 
         var div = ptsInCircle/totalNumPts;
