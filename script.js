@@ -14,7 +14,7 @@ function setup() {
     manager.addScene(StartScreen);
     manager.addScene(ApproxScreen);
 
-    manager.showScene(ApproxScreen);
+    manager.showNextScene();
 
     canvasHeight = canvasWidth = 800;
     offset = 100;
@@ -30,13 +30,57 @@ function draw() {
 
 function StartScreen() {
 
+    var startBtn;
+
     this.enter = function() {
+
+        startBtn = new Clickable();
+        this.initBtns();
 
     }
 
     this.draw = function() {
 
         background("#f1f1f1");
+
+
+        fill("#000");
+        textSize(68);
+        textFont("Georgia");
+        textAlign(RIGHT);
+        text("Approximating PI",
+            canvasWidth/2 + offset + offset,
+            canvasHeight/2 - offset
+        );
+
+        startBtn.draw();
+
+    }
+
+    this.initBtns = function() {
+
+        // start btn
+        startBtn.locate(canvasWidth/3.5, canvasHeight/2);
+        startBtn.resize(200, 50);
+        startBtn.color = "#fff";
+        startBtn.cornerRadius = 3;
+        startBtn.strokeWeight = 1;
+        startBtn.text = "Start";
+        startBtn.textSize = 32;
+        startBtn.textFont = "serif";
+        startBtn.onPress = function() {
+            manager.showNextScene();
+        }
+        startBtn.onHover = function() {
+            startBtn.stroke = "#333";
+            startBtn.color = "#bbb";
+            startBtn.textColor = "#fff";
+        }
+        startBtn.onOutside = function() {
+            startBtn.stroke = "#000";
+            startBtn.color = "#fff";
+            startBtn.textColor = "#000";
+        }
 
     }
 
@@ -73,6 +117,7 @@ function ApproxScreen() {
         this.drawCenterCircle();
 
         textSize(16);
+        textFont("Georgia");
         textAlign(LEFT);
         text(
             "PI Approximation: " + piApprox,
