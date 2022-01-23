@@ -45,6 +45,7 @@ function StartScreen() {
 function ApproxScreen() {
 
     var randPtsBtn, pauseBtn, restartBtn;
+    var centerPt;
     var piApprox = 0.0;
     var totalPts = [];
     var totalNumPts = 0;
@@ -127,6 +128,11 @@ function ApproxScreen() {
 
         // center point
         fill("#000");
+        centerPt = new Point();
+        centerPt.x = (canvasWidth/2)-(offset/2);
+        centerPt.y = (canvasHeight/2)+(offset/2);
+        centerPt.d = 2;
+
         circle((canvasWidth/2)-(offset/2), (canvasHeight/2)+(offset/2), 2);
 
 
@@ -229,9 +235,16 @@ function ApproxScreen() {
         pt.x = int( random(0, canvasWidth-offset) );
         pt.y = int( random(offset, canvasHeight) );
         pt.d = 3;
-        totalPts.push(pt);
-        //console.log(pt);
+        pt.color = "red";
 
+        console.log(pt.distanceFrom(centerPt));
+        if ( pt.distanceFrom(centerPt) > 350) {
+            pt.color = "blue"
+        } else {
+            pt.color = "red";
+        }
+
+        totalPts.push(pt);
 
         //noLoop();
 
