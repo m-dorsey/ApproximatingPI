@@ -36,7 +36,7 @@ function StartScreen() {
 
     this.draw = function() {
 
-        background("#e6e6e6");
+        background("#f1f1f1");
 
     }
 
@@ -66,7 +66,7 @@ function ApproxScreen() {
 
     this.draw = function() {
 
-        background("#e6e6e6");
+        background("#f7f7f7");
         randPtsBtn.draw();
         restartBtn.draw();
 
@@ -87,13 +87,13 @@ function ApproxScreen() {
             10, 80
         );
 
-        text("(" + int(mouseX) + ", " + int(mouseY) + ")", int(mouseX), int(mouseY));
+        // text("(" + int(mouseX) + ", " + int(mouseY) + ")", int(mouseX), int(mouseY));
 
 
         if (genPts) {
             this.generateRandPts();
             pauseBtn.draw();
-
+            this.updatePIApprox();
         }
 
         if (flag) {
@@ -103,6 +103,8 @@ function ApproxScreen() {
         for (p of totalPts) {
             p.draw();
         }
+
+
 
 
 
@@ -237,16 +239,25 @@ function ApproxScreen() {
         pt.d = 3;
         pt.color = "red";
 
-        console.log(pt.distanceFrom(centerPt));
+        // console.log(pt.distanceFrom(centerPt));
         if ( pt.distanceFrom(centerPt) > 350) {
             pt.color = "blue"
         } else {
             pt.color = "red";
+            ptsInCircle += 1;
         }
 
         totalPts.push(pt);
 
-        //noLoop();
+        // noLoop();
+
+    }
+
+    this.updatePIApprox = function() {
+
+        var div = ptsInCircle/totalNumPts;
+
+        piApprox = 4*div;
 
     }
 
